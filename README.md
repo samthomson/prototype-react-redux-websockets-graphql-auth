@@ -3,6 +3,8 @@ skeleton react app which uses graphql over websockets to communicate with server
 
 server should have a graphql endpoint exposed to help compose queries, but app will send all queries/mutations over websockets.
 
+http://127.0.0.1:3400`
+
 - [ ] typescript react app
 - [ ] simple server (auto reloading)
 - [ ] redux in app

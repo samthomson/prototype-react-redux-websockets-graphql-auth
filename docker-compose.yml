@@ -1,0 +1,14 @@
+version: "2"
+services:
+  app:
+      build: ./
+    #   command: [sh, -c, "cd /app/server && yarn run watch-server & cd /frontend/client && yarn run start"]
+      command: [sh, -c, "cd /app && yarn run start"]
+      ports:
+        - "3400:3000"
+        - "3401:4000"
+      volumes:
+        - ./app:/app
+      expose:
+        - "3400"
+        - "3401"
