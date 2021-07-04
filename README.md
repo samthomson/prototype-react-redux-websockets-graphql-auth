@@ -6,10 +6,10 @@ server should have a graphql endpoint exposed to help compose queries, but app w
 http://127.0.0.1:3400`
 
 - [x] typescript react app
-- [ ] simple server (auto reloading)
+- [x] simple server (auto reloading)
 - [x] redux in app
 - [ ] websocket middleware connecting to websocket server
 - [ ] authenticate websocket connection/session
 - [ ] graphql query/mutation over websocket
-- [ ] graphql endpoint
+- [x] graphql endpoint
 - [ ] guest/authed routes in app; auth state in redux
