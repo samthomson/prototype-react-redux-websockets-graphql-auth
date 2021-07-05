@@ -1,3 +1,4 @@
 app/api/node_modules
 app/api/dist
 app/spa/node_modules
+app/spa-old/node_modules
