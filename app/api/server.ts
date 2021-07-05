@@ -1,7 +1,9 @@
 import { ApolloServer, gql } from 'apollo-server'
+import ws from 'ws'
+import { useServer } from 'graphql-ws/lib/use/ws'
+import { buildSchema } from 'graphql'
 
-
-const typeDefs = gql`
+const gqlSchema = `
     input AuthInput {
         email: String
     }
@@ -17,6 +19,10 @@ const typeDefs = gql`
         login(authInput: AuthInput!): AuthResponse
     }
 `
+
+const typeDefs = gql`
+    ${gqlSchema}
+`
 type LoginResponse = {
     token?: string
     error?: string
@@ -30,16 +36,26 @@ const login = (parent, args): LoginResponse => {
     }
 }
 
+const queries = {
+    ping: () => 'pinged ' + Math.random(),
+}
+
 const resolvers = {
-    Query: {
-        ping: () => 'pinged ' + Math.random(),
-    },
+    Query: queries,
     Mutation: {
         login,
     },
 }
 
-const server = new ApolloServer({
+
+const schema = buildSchema(`
+    ${gqlSchema}
+`)
+const roots = {
+    query: queries,
+}
+
+const httpServer = new ApolloServer({
     typeDefs,
     resolvers,
     cors: {
@@ -47,6 +63,27 @@ const server = new ApolloServer({
         credentials: true,
     },
 })
-server.listen().then(({ url }) => {
+httpServer.listen().then(({ url }) => {
     console.log(`server ready: url: ${url}`)
 })
+
+
+const wsServer = new ws.Server({
+    port: 4001,
+    path: '/wsgraphql',
+  });
+  
+  useServer(
+    // from the previous step
+    { schema, roots },
+    wsServer,
+  );
+
+  wsServer.on('connection', function connection(ws) {
+      console.log('\nconnected\n')
+    ws.on('message', function incoming(message) {
+      console.log('received: %s', message);
+    });
+  
+    // ws.send('something');
+  })
