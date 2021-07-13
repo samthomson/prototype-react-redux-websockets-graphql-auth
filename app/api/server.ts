@@ -71,19 +71,38 @@ httpServer.listen().then(({ url }) => {
 const wsServer = new ws.Server({
     port: 4001,
     path: '/wsgraphql',
-  });
+});
   
-  useServer(
+useServer(
     // from the previous step
-    { schema, roots },
+    {
+        schema,
+        roots,
+        onConnect: (ctx) => {
+            console.log('Connect', ctx)
+        },
+        onSubscribe: (ctx, msg) => {
+            console.log('Subscribe', { ctx, msg })
+        },
+        onNext: (ctx, msg, args, result) => {
+            console.debug('Next', { ctx, msg, args, result })
+        },
+        onError: (ctx, msg, errors) => {
+            console.error('Error', { ctx, msg, errors })
+        },
+        onComplete: (ctx, msg) => {
+            console.log('Complete', { ctx, msg })
+        }
+    },
     wsServer,
-  );
+);
 
-  wsServer.on('connection', function connection(ws) {
-      console.log('\nconnected\n')
+wsServer.on('connection', function connection(ws) {
+    console.log('\nserver: connected\n')
+    
     ws.on('message', function incoming(message) {
-      console.log('received: %s', message);
-    });
+        console.log('server: received: %s', message)
+    })
   
     // ws.send('something');
-  })
+})

@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { createClient } from 'graphql-ws'
 import logo from './logo.svg';
@@ -82,3 +83,5 @@ function App() {
 }
 
 export default App;
+*/
+export {}

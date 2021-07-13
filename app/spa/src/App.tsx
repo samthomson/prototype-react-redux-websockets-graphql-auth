@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import * as ReactRedux from 'react-redux'
+import './App.css'
+
+import * as Actions from 'src/redux/actions'
+import * as Selectors from 'src/redux/selectors'
 
 function App() {
+
+  const isServerConnected = ReactRedux.useSelector(Selectors.isServerConnected)
+
+  const dispatch = ReactRedux.useDispatch()
+
+  const connect = () => dispatch(Actions.sendWSConnectionRequest())
+  const disconnect = () => dispatch(Actions.sendWSDisconnect())
+
+  const ping = () => dispatch(Actions.ping())
+
+
+  if (!isServerConnected) {
+    return (
+      <div className="App">
+      <button onClick={connect}>connect</button>
+        <button onClick={ping}>ping</button>
+      </div>
+    )
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>this is an authed section of the app</p>
+      <button onClick={disconnect}>disconnect</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
