@@ -18,6 +18,7 @@ const socketMiddleware = () =>
 
 				socket = createClient({
 					url,
+					lazy: false,
 					on: {
 						closed: () => {
 						  console.log("closed");
